@@ -8,13 +8,18 @@ Public Class Form1
 
             Dim fs As New FileStream(OpenFileDialog1.FileName, FileMode.Open)
             Dim br As New BinaryReader(fs)
-
+            'Debug.Print("el tamaño es: " & fs.Length)
             fs.Position = 60
             version = br.ReadInt16
+            ' Support for PES4 1.0
+            If (fs.Length = 8503296) Then
+                version = fs.Length
+                'Debug.Print(version)
+            End If
             'MsgBox(version)
             Select Case version
-                Case 2320
-                    'pes4
+                Case 8503296
+                    'pes4 1.0
                     fs.Position = 385965
                     'Dim zoom As String = br.ReadInt32()
                     Dim decValue As Integer = 0
@@ -31,8 +36,26 @@ Public Class Form1
                     'MsgBox("Hexadecimal value is: " & convert)
                     NumericUpDown1.Value = convert
 
+                Case 2320
+                    'pes4 1.10
+                    fs.Position = 389749
+                    'Dim zoom As String = br.ReadInt32()
+                    Dim decValue As Integer = 0
+                    Dim hexString As String = Nothing
+
+                    decValue = Int(br.ReadInt32())
+                    'convert into hexadecimal 
+                    hexString = Hex(decValue)
+
+                    'MsgBox("Hexadecimal value is: " & hexString)
+
+                    Dim convert As Single = HextoFloatIEEE(hexString) ' Result: 3.367481
+
+                    'MsgBox("Hexadecimal value is: " & convert)
+                    NumericUpDown1.Value = convert
+
                 Case 140
-                    'WE8
+                    'WE8I
                     fs.Position = 386397
                     'Dim zoom As String = br.ReadInt32()
                     Dim decValue As Integer = 0
@@ -61,12 +84,18 @@ Public Class Form1
     Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
         Dim fs As New FileStream(OpenFileDialog1.FileName, FileMode.Open)
         Dim bw As New BinaryWriter(fs)
-        Select version
-            Case 2320
-                'pes4
+        Select Case version
+            Case 8503296
+                'pes4 1.0
                 Dim hexString As String = ToHexString(NumericUpDown1.Value) ' Result: 405784D0
                 'hexString
                 fs.Position = 385965
+                bw.Write(Int32.Parse(CInt("&H" & hexString)))
+            Case 2320
+                'pes4 1.10
+                Dim hexString As String = ToHexString(NumericUpDown1.Value) ' Result: 405784D0
+                'hexString
+                fs.Position = 389749
                 bw.Write(Int32.Parse(CInt("&H" & hexString)))
             Case 140
                 'we8
