@@ -38,7 +38,7 @@ Public Class Form1
 
                 Case 2320
                     'pes4 1.10
-                    fs.Position = 389749
+                    fs.Position = 386445
                     'Dim zoom As String = br.ReadInt32()
                     Dim decValue As Integer = 0
                     Dim hexString As String = Nothing
@@ -91,7 +91,7 @@ Public Class Form1
                     'pes4 1.0
                     Dim hexString As String = ToHexString(NumericUpDown1.Value) ' Result: 405784D0
                     Dim clippingOffsets() As Integer = {&H2764A7, &H2764F6, &H276625, &H27663C, &H2766CC, &H276775, &H276792, &H276793, &H276794}
-                    Dim clippingValues() As Integer = {&HEB, &HEB, &HEB, &HEB, &HEB, &HEB, &H90, &H90, &H90}
+                    Dim clippingValues() As Byte = {&HEB, &HEB, &HEB, &HEB, &HEB, &HEB, &H90, &H90, &H90}
                     Dim roofOffset As Integer = &H5D9890
                     Dim roofValue As Integer = &HBF800000
                     'hexString
@@ -123,11 +123,11 @@ Public Class Form1
                     'pes4 1.10
                     Dim hexString As String = ToHexString(NumericUpDown1.Value) ' Result: 405784D0
                     Dim clippingOffsets() As Integer = {&H276737, &H276786, &H2768B5, &H2768CC, &H27695C, &H276A05, &H276A22, &H276A23, &H276A24}
-                    Dim clippingValues() As Integer = {&HEB, &HEB, &HEB, &HEB, &HEB, &HEB, &H90, &H90, &H90}
+                    Dim clippingValues() As Byte = {&HEB, &HEB, &HEB, &HEB, &HEB, &HEB, &H90, &H90, &H90}
                     Dim roofOffset As Integer = &H5DA8C8
                     Dim roofValue As Integer = &HBF800000
                     'hexString
-                    fs.Position = 389749
+                    fs.Position = 386445
                     bw.Write(Int32.Parse(CInt("&H" & hexString)))
                     ' fixing stadium clipping
                     If clippingChkBox.Checked Then
@@ -155,7 +155,7 @@ Public Class Form1
                     'we8
                     Dim hexString As String = ToHexString(NumericUpDown1.Value) ' Result: 405784D0
                     Dim clippingOffsets() As Integer = {&H276ED7, &H276F26, &H277055, &H27706C, &H2770FC, &H2771A5, &H2771C2, &H2771C3, &H2771C4}
-                    Dim clippingValues() As Integer = {&HEB, &HEB, &HEB, &HEB, &HEB, &HEB, &H90, &H90, &H90}
+                    Dim clippingValues() As Byte = {&HEB, &HEB, &HEB, &HEB, &HEB, &HEB, &H90, &H90, &H90}
                     Dim roofOffset As Integer = &H5DB600
                     Dim roofValue As Integer = &HBF800000
                     'hexString
