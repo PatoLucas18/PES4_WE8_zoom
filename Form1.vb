@@ -82,33 +82,114 @@ Public Class Form1
 
    
     Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
-        Dim fs As New FileStream(OpenFileDialog1.FileName, FileMode.Open)
-        Dim bw As New BinaryWriter(fs)
-        Select Case version
-            Case 8503296
-                'pes4 1.0
-                Dim hexString As String = ToHexString(NumericUpDown1.Value) ' Result: 405784D0
-                'hexString
-                fs.Position = 385965
-                bw.Write(Int32.Parse(CInt("&H" & hexString)))
-            Case 2320
-                'pes4 1.10
-                Dim hexString As String = ToHexString(NumericUpDown1.Value) ' Result: 405784D0
-                'hexString
-                fs.Position = 389749
-                bw.Write(Int32.Parse(CInt("&H" & hexString)))
-            Case 140
-                'we8
-                Dim hexString As String = ToHexString(NumericUpDown1.Value) ' Result: 405784D0
-                'hexString
-                fs.Position = 386397
-                bw.Write(Int32.Parse(CInt("&H" & hexString)))
-        End Select
-
-        
-        fs.Close()
-        bw.Close()
-        MsgBox("OK", MsgBoxStyle.Information)
+        'Debug.Print("archivo es " & OpenFileDialog1.FileName)
+        If OpenFileDialog1.FileName <> "" Then
+            Dim fs As New FileStream(OpenFileDialog1.FileName, FileMode.Open)
+            Dim bw As New BinaryWriter(fs)
+            Select Case version
+                Case 8503296
+                    'pes4 1.0
+                    Dim hexString As String = ToHexString(NumericUpDown1.Value) ' Result: 405784D0
+                    Dim clippingOffsets() As Integer = {&H2764A7, &H2764F6, &H276625, &H27663C, &H2766CC, &H276775, &H276792, &H276793, &H276794}
+                    Dim clippingValues() As Integer = {&HEB, &HEB, &HEB, &HEB, &HEB, &HEB, &H90, &H90, &H90}
+                    Dim roofOffset As Integer = &H5D9890
+                    Dim roofValue As Integer = &HBF800000
+                    'hexString
+                    fs.Position = 385965
+                    bw.Write(Int32.Parse(CInt("&H" & hexString)))
+                    ' fixing stadium clipping
+                    If clippingChkBox.Checked Then
+                        For i = 0 To (clippingOffsets.Length - 1)
+                            fs.Position = clippingOffsets(i)
+                            bw.Write(clippingValues(i))
+                        Next
+                    Else
+                        clippingValues = {&H7A, &H7A, &H75, &H7A, &H75, &H75, &H83, &HCE, &HC}
+                        For i = 0 To (clippingOffsets.Length - 1)
+                            fs.Position = clippingOffsets(i)
+                            bw.Write(clippingValues(i))
+                        Next
+                    End If
+                    ' adding stadium roof
+                    If roofChkBox.Checked Then
+                        fs.Position = roofOffset
+                        bw.Write(roofValue)
+                    Else
+                        roofValue = &HBDD67750
+                        fs.Position = roofOffset
+                        bw.Write(roofValue)
+                    End If
+                Case 2320
+                    'pes4 1.10
+                    Dim hexString As String = ToHexString(NumericUpDown1.Value) ' Result: 405784D0
+                    Dim clippingOffsets() As Integer = {&H276737, &H276786, &H2768B5, &H2768CC, &H27695C, &H276A05, &H276A22, &H276A23, &H276A24}
+                    Dim clippingValues() As Integer = {&HEB, &HEB, &HEB, &HEB, &HEB, &HEB, &H90, &H90, &H90}
+                    Dim roofOffset As Integer = &H5DA8C8
+                    Dim roofValue As Integer = &HBF800000
+                    'hexString
+                    fs.Position = 389749
+                    bw.Write(Int32.Parse(CInt("&H" & hexString)))
+                    ' fixing stadium clipping
+                    If clippingChkBox.Checked Then
+                        For i = 0 To (clippingOffsets.Length - 1)
+                            fs.Position = clippingOffsets(i)
+                            bw.Write(clippingValues(i))
+                        Next
+                    Else
+                        clippingValues = {&H7A, &H7A, &H75, &H7A, &H75, &H75, &H83, &HCE, &HC}
+                        For i = 0 To (clippingOffsets.Length - 1)
+                            fs.Position = clippingOffsets(i)
+                            bw.Write(clippingValues(i))
+                        Next
+                    End If
+                    ' adding stadium roof
+                    If roofChkBox.Checked Then
+                        fs.Position = roofOffset
+                        bw.Write(roofValue)
+                    Else
+                        roofValue = &HBDD67750
+                        fs.Position = roofOffset
+                        bw.Write(roofValue)
+                    End If
+                Case 140
+                    'we8
+                    Dim hexString As String = ToHexString(NumericUpDown1.Value) ' Result: 405784D0
+                    Dim clippingOffsets() As Integer = {&H276ED7, &H276F26, &H277055, &H27706C, &H2770FC, &H2771A5, &H2771C2, &H2771C3, &H2771C4}
+                    Dim clippingValues() As Integer = {&HEB, &HEB, &HEB, &HEB, &HEB, &HEB, &H90, &H90, &H90}
+                    Dim roofOffset As Integer = &H5DB600
+                    Dim roofValue As Integer = &HBF800000
+                    'hexString
+                    fs.Position = 386397
+                    bw.Write(Int32.Parse(CInt("&H" & hexString)))
+                    ' fixing stadium clipping
+                    If clippingChkBox.Checked Then
+                        For i = 0 To (clippingOffsets.Length - 1)
+                            fs.Position = clippingOffsets(i)
+                            bw.Write(clippingValues(i))
+                        Next
+                    Else
+                        clippingValues = {&H7A, &H7A, &H75, &H7A, &H75, &H75, &H83, &HCE, &HC}
+                        For i = 0 To (clippingOffsets.Length - 1)
+                            fs.Position = clippingOffsets(i)
+                            bw.Write(clippingValues(i))
+                        Next
+                    End If
+                    ' adding stadium roof
+                    If roofChkBox.Checked Then
+                        fs.Position = roofOffset
+                        bw.Write(roofValue)
+                    Else
+                        roofValue = &HBDD67750
+                        fs.Position = roofOffset
+                        bw.Write(roofValue)
+                    End If
+            End Select
+            fs.Close()
+            bw.Close()
+            MsgBox("OK", MsgBoxStyle.Information)
+        Else
+            MsgBox("Please select an exe file", MsgBoxStyle.Exclamation)
+        End If
     End Sub
 
 
